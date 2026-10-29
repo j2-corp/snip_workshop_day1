@@ -15,6 +15,7 @@ snip-demo/                 main: superproject, README, .gitmodules
   backend/                backend branch: zero-dependency Bun server
   frontend/               frontend branch: Angular 19 web app
   cli/                    cli branch: zero-dependency Node CLI
+  bundle/                 generated release: server, built UI, CLI, deployment files
 ```
 
 `.gitmodules` records each submodule's URL and tracked branch. Tracking a branch
@@ -118,3 +119,36 @@ layer; the second records its new pinned SHA on `main`. After pulling updates to
 `main`, run `git submodule update --init --recursive` to materialize the pinned
 versions. Use `--remote` only when intentionally advancing a pointer to a branch
 tip rather than reproducing the current pinned snapshot.
+
+## Generate a release bundle
+
+`bundle` is generated output on its own branch, pinned as a fourth submodule.
+Never hand-edit it. From a clean `main` checkout:
+
+```sh
+node scripts/build-bundle.mjs
+node scripts/build-bundle.mjs --push
+```
+
+The zero-dependency Node script updates source submodules to their branch tips,
+runs `npm install` and the production Angular build, then copies the backend,
+CLI, and `dist/snip-frontend/browser` into `bundle`. It generates `.env`
+(`PUBLIC_DIR=./public`), a CommonJS-compatible package manifest, Dockerfile,
+`.dockerignore`, and Railway Dockerfile configuration. It commits only changed
+release files and submodule pointers. Repeating an unchanged build creates no
+commits. Only `--push` publishes commits; it also publishes commits left by an
+earlier local-only run. Dirty checkouts or pre-staged changes fail explicitly.
+
+Run the assembled release:
+
+```sh
+cd bundle
+bun start
+# Or: docker build -t snip .
+#     docker run --rm -p 3000:3000 snip
+```
+
+Stop any existing backend on port 3000 first. One Bun process serves the UI, API,
+and redirects at `http://localhost:3000`; `node cli.js ls` uses the same API.
+The current frontend still targets `http://localhost:3000`, so remote deployment
+requires a separate frontend API-origin change in its source branch.
