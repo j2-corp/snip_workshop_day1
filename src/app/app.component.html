@@ -5,10 +5,10 @@
     <p>Turn a long URL into a short link. Keep an eye on every click.</p>
   </header>
 
-  <section class="card" aria-labelledby="create-heading">
-    <h2 id="create-heading">Shorten a link</h2>
+  <section class="composer" aria-labelledby="create-heading">
+    <h2 id="create-heading" class="sr-only">Shorten a link</h2>
     <form (ngSubmit)="shorten()" novalidate>
-      <label for="url">Your URL</label>
+      <label for="url" class="sr-only">Your URL</label>
       <div class="form-row">
         <input id="url" name="url" type="url" placeholder="https://example.com/your-long-link"
           autocomplete="url" required [ngModel]="url()" (ngModelChange)="url.set($event)"
