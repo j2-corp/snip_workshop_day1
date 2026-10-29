@@ -152,3 +152,19 @@ Stop any existing backend on port 3000 first. One Bun process serves the UI, API
 and redirects at `http://localhost:3000`; `node cli.js ls` uses the same API.
 The current frontend still targets `http://localhost:3000`, so remote deployment
 requires a separate frontend API-origin change in its source branch.
+
+## GitHub Actions
+
+- **Build bundle** runs hourly and on manual dispatch on the default branch
+  (`main`). It uses Node 24 to publish generated output and pointer bumps.
+  It intentionally has no push trigger: source branches do not contain the
+  workflow file.
+- **Build and push image** watches pushes to `main` affecting the `bundle`
+  gitlink or its own workflow file, and supports manual dispatch. It publishes
+  `ghcr.io/j2-corp/snip_workshop_day1:latest` and `sha-<short-main-sha>`.
+- Pushes made with `GITHUB_TOKEN` do not start other push workflows. Therefore
+  the bundle job explicitly dispatches the image workflow when the release
+  pointer changes, using `actions: write` in addition to `contents: write`.
+  Unchanged hourly runs do not build another image.
+- First-time GHCR packages may be private. Make the package public in GitHub's
+  package settings if anonymous pulls are needed.
