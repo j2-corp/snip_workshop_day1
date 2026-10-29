@@ -1,0 +1,180 @@
+:host {
+  display: block;
+}
+
+main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 56px 20px;
+}
+
+header {
+  margin-bottom: 32px;
+}
+
+.eyebrow {
+  color: #3559b7;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+h1 {
+  margin: 8px 0;
+  font-size: 3rem;
+  letter-spacing: -0.05em;
+}
+
+h2 {
+  margin: 0 0 20px;
+  font-size: 1.15rem;
+}
+
+header > p:last-child, .hint, footer {
+  color: #546174;
+}
+
+.card {
+  margin-bottom: 24px;
+  padding: 28px;
+  border: 1px solid #dfe5ee;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 4px 20px #18264006;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.form-row, .section-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #aebbd0;
+  border-radius: 8px;
+}
+
+button {
+  padding: 12px 18px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: #284da8;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: #1d3b86;
+}
+
+button:disabled, input:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.secondary {
+  padding: 8px 12px;
+  border-color: #d3ddeb;
+  background: #f3f6fc;
+  color: #284da8;
+}
+
+.secondary:hover:not(:disabled) {
+  background: #e3ebfa;
+}
+
+.section-heading {
+  justify-content: space-between;
+}
+
+.section-heading h2 {
+  margin: 0;
+}
+
+a {
+  color: #284da8;
+  text-underline-offset: 3px;
+}
+
+:is(a, input, button):focus-visible {
+  outline: 3px solid #779be7;
+  outline-offset: 3px;
+}
+
+.error, .success {
+  margin: 16px 0 0;
+  padding: 12px;
+  border-radius: 8px;
+  overflow-wrap: anywhere;
+}
+
+.error {
+  color: #9c2323;
+  background: #fff0f0;
+}
+
+.success {
+  color: #17593d;
+  background: #edf9f2;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+th, td {
+  padding: 14px 10px;
+  border-bottom: 1px solid #e6ebf2;
+  vertical-align: top;
+}
+
+th {
+  color: #546174;
+  font-weight: 600;
+}
+
+.original-url {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.hits {
+  text-align: right;
+}
+
+footer {
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+@media (max-width: 540px) {
+  main { padding: 32px 16px; }
+  .card { padding: 20px; }
+  .form-row { align-items: stretch; flex-direction: column; }
+}

@@ -1,0 +1,74 @@
+<main>
+  <header>
+    <p class="eyebrow">SMALL LINKS, SIMPLE SHARING</p>
+    <h1>Snip</h1>
+    <p>Turn a long URL into a short link. Keep an eye on every click.</p>
+  </header>
+
+  <section class="card" aria-labelledby="create-heading">
+    <h2 id="create-heading">Shorten a link</h2>
+    <form (ngSubmit)="shorten()" novalidate>
+      <label for="url">Your URL</label>
+      <div class="form-row">
+        <input id="url" name="url" type="url" placeholder="https://example.com/your-long-link"
+          autocomplete="url" required [ngModel]="url()" (ngModelChange)="url.set($event)"
+          [disabled]="submitting()" [attr.aria-invalid]="formError() ? 'true' : null"
+          [attr.aria-describedby]="formError() ? 'form-error' : null">
+        <button type="submit" [disabled]="submitting()">
+          {{ submitting() ? 'Shortening...' : 'Shorten URL' }}
+        </button>
+      </div>
+    </form>
+
+    @if (formError()) {
+      <p class="error" id="form-error" role="alert">{{ formError() }}</p>
+    }
+    @if (createdLink(); as link) {
+      <p class="success" role="status">
+        Your short link:
+        <a [href]="link.shortUrl" target="_blank" rel="noopener noreferrer">{{ link.shortUrl }}</a>
+      </p>
+    }
+  </section>
+
+  <section class="card" aria-labelledby="links-heading" [attr.aria-busy]="loading()">
+    <div class="section-heading">
+      <h2 id="links-heading">Your links</h2>
+      <button class="secondary" type="button" (click)="refresh()" [disabled]="loading()">
+        {{ loading() ? 'Refreshing...' : 'Refresh' }}
+      </button>
+    </div>
+    <p class="hint">Refresh to see the latest hit counts.</p>
+    @if (listError()) {
+      <p class="error" role="alert">{{ listError() }}</p>
+    }
+    @if (links().length) {
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Short links, original URLs, and hit counts</caption>
+          <thead>
+            <tr>
+              <th scope="col">Short code</th>
+              <th scope="col">Original URL</th>
+              <th scope="col" class="hits">Hits</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (link of links(); track link.code) {
+              <tr>
+                <td><a [href]="link.shortUrl" target="_blank" rel="noopener noreferrer">{{ link.code }}</a></td>
+                <td class="original-url">{{ link.url }}</td>
+                <td class="hits">{{ link.hits }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else if (loading()) {
+      <p role="status">Loading links...</p>
+    } @else if (!listError()) {
+      <p class="hint">No links yet. Create your first one above.</p>
+    }
+  </section>
+  <footer>Links are stored in memory and disappear when the backend restarts.</footer>
+</main>
